@@ -10,6 +10,9 @@ const birthYear = 2008;
 const today = new Date();
 const currentYear = today.getFullYear();
 
+var radio = null;
+var radioPlayingSong = null;
+
 let nextBirthday = new Date(currentYear, birthdayMonth - 1, birthdayDay);
 if (today > nextBirthday) {
     nextBirthday = new Date(currentYear + 1, birthdayMonth - 1, birthdayDay);
@@ -64,7 +67,57 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
     setInterval(change, 5000);
+
+    setInterval(setRadioText, 500);
+
+    let a = new EventSource("https://api.zeno.fm/mounts/metadata/subscribe/ldvobrlabguvv");
+    a.onmessage = function(t) {
+        let e = JSON.parse(t.data);
+        if (e.streamTitle) {
+            radioPlayingSong = e.streamTitle;
+        }
+    }
 });
+
+function setRadioText() {
+    var m = getMutedStatus();
+    if (m) {
+        var mt = "(Tap here to unmute)"
+    }
+    else {
+        var mt = "(Tap here to mute)"
+    }
+    document.getElementById("radio-text").textContent = "📻 My Little Radio!! " + mt +"\n" + radioPlayingSong;
+}
+
+function getMutedStatus() {
+    if (radio == null) {
+        return true;
+    }
+
+    if (radio.muted) {
+        return true;
+    }
+    else {
+        return false;
+    } 
+}
+
+function radiotoggle() {
+    if (radio == null) {
+        radio = new Audio('https://stream.zeno.fm/ldvobrlabguvv');
+        radio.play();
+        return;
+    }
+
+    if (radio.muted) {
+        radio.muted = false;
+    }
+    else {
+        radio.muted = true;
+    }
+
+}
 
 function change() {
   document.getElementById("countdown").setAttribute("class", "text-fade");
