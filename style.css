@@ -22,7 +22,8 @@ body {
 }
 
 .content {
-    width: 100%;
+    max-width: 800px;
+    margin: 20px auto;
     position: relative;
 
     animation: fadeInAnimation ease 1s;
@@ -183,7 +184,7 @@ a:visited {
     font-size: 20px;
 }
 
-.radio-text {
+#radio-text {
     position: fixed;
     bottom: 10px; /* Adjust the distance from the bottom */
     right: 10px;  /* Adjust the distance from the right */
@@ -192,6 +193,14 @@ a:visited {
     padding: 10px; /* Padding around the text */
     border-radius: 5px; /* Rounded corners */
     font-size: 16px; /* Font size */
-    white-space: pre-line;
     text-align: right;
+}
+
+#radio-text-1 {
+    margin: 0px;
+}
+
+#radio-text-2 {
+    margin: 5px;
+    font-size: x-small;
 }

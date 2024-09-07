@@ -13,6 +13,8 @@ const currentYear = today.getFullYear();
 var radio = null;
 var radioPlayingSong = null;
 
+var radioIsLoading = false;
+
 let nextBirthday = new Date(currentYear, birthdayMonth - 1, birthdayDay);
 if (today > nextBirthday) {
     nextBirthday = new Date(currentYear + 1, birthdayMonth - 1, birthdayDay);
@@ -81,13 +83,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function setRadioText() {
     var m = getMutedStatus();
-    if (m) {
-        var mt = "(Tap here to unmute)"
+    if (radioIsLoading) {
+        var mt = "(Loading...)"
     }
     else {
-        var mt = "(Tap here to mute)"
+        if (m) {
+            var mt = "(Tap here to unmute)"
+        }
+        else {
+            var mt = "(Tap here to mute)"
+        }
     }
-    document.getElementById("radio-text").textContent = "📻 My Little Radio!! " + mt +"\n" + radioPlayingSong;
+    document.getElementById("radio-text-1").textContent = "📻 My Little Radio!! " + mt;
+    document.getElementById("radio-text-2").textContent = radioPlayingSong;
 }
 
 function getMutedStatus() {
@@ -104,8 +112,16 @@ function getMutedStatus() {
 }
 
 function radiotoggle() {
+    if (radioIsLoading) {
+        return;
+    }
+
     if (radio == null) {
+        radioIsLoading = true;
         radio = new Audio('https://stream.zeno.fm/ldvobrlabguvv');
+        radio.addEventListener("canplaythrough", (event) => {
+            radioIsLoading = false;
+        });
         radio.play();
         return;
     }
